@@ -18,6 +18,10 @@ jobs:
     timeout-minutes: 120
     env:
       E2E_TIME_SCALE: 3
+      # A runner has no graphics chip: the GPU worker searches on PoCL, and
+      # has to.
+      LATTICE_MINER_OPENCL_DEVICES: all
+      LATTICE_EXPECT_GPU: 1
     steps:
       - uses: actions/checkout@v5
         with:

@@ -6,11 +6,13 @@
       "../../../build/bin/lattice": "bin/lattice",
       "../../../build/bin/lattice-node": "bin/lattice-node",
       "../../../build/bin/lattice-mining-coordinator": "bin/lattice-mining-coordinator",
-      "../../../build/bin/lattice-miner": "bin/lattice-miner"
+      "../../../build/bin/lattice-miner": "bin/lattice-miner",
+      "../../../build/bin/lattice-miner-gpu": "bin/lattice-miner-gpu"
     },
     "linux": {
       "deb": {
-        "depends": ["libsqlite3-0"]
+        "depends": ["libsqlite3-0"],
+        "recommends": ["ocl-icd-libopencl1"]
       }
     }
   }
