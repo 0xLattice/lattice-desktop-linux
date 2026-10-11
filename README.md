@@ -83,6 +83,14 @@ installed app on a virtual display, checking that the app itself brought its
 node up through the packaged CLI. It installs a package, so run it in a
 container; CI does.
 
+`scripts/test-ui.sh` drives the installed app in its own window through
+WebDriver, with real clicks and keys and nothing standing in for the shell or
+the node: making a wallet, the node the app starts, sending, mining, a
+transfer seen through to a confirmation, locking, node settings, a relaunch,
+and the common mistakes on the way (bad passwords, a bad address or amount,
+more than the balance, mining with the node stopped, bad ports). CI runs it
+on Ubuntu 24.04 against the installed `.deb`.
+
 ## Updating
 
 To take a newer app or node, move the submodule:

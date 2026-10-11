@@ -60,3 +60,25 @@ jobs:
           node-version: 24
       - run: sudo apt-get update && sudo apt-get install -y ./dist/*.deb pocl-opencl-icd
       - run: scripts/test-gpu-mining.sh /usr/lib/Lattice/bin
+
+  # The installed app in its own window, driven through WebDriver: a wallet,
+  # the node the app starts, mining, a transfer, and the common mistakes on
+  # the way, with nothing standing in for the shell or the node.
+  ui:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v4
+        with:
+          name: lattice-desktop-linux-amd64
+          path: dist
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: sudo apt-get update && sudo apt-get install -y ./dist/*.deb webkit2gtk-driver xvfb
+      - run: cargo install tauri-driver --locked
+      - run: scripts/test-ui.sh
