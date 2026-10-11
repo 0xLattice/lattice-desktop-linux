@@ -82,3 +82,11 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ./dist/*.deb webkit2gtk-driver xvfb
       - run: cargo install tauri-driver --locked
       - run: scripts/test-ui.sh
+      - name: Check bundled notices and AppImage runtime
+        run: |
+          test -s /usr/lib/Lattice/THIRD-PARTY-NOTICES.txt
+          chmod +x dist/*.AppImage
+          cd dist
+          ./Lattice_*.AppImage --appimage-extract >/dev/null
+          test -s squashfs-root/usr/lib/Lattice/THIRD-PARTY-NOTICES.txt
+          ../scripts/test-ui.sh "$PWD/squashfs-root/AppRun" "$PWD/squashfs-root/usr/lib/Lattice/bin"

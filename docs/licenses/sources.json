@@ -1,0 +1,12 @@
+{
+  "dlopen2-0.8.2": [
+    "https://github.com/OpenByteDev/dlopen2/blob/cc80e4a0a90d499b677fdf7743699b4b3a43a989/LICENSE"
+  ],
+  "dlopen2_derive-0.4.3": [
+    "https://github.com/OpenByteDev/dlopen2/blob/cc80e4a0a90d499b677fdf7743699b4b3a43a989/LICENSE"
+  ],
+  "libappindicator-sys-0.9.0": [
+    "https://github.com/tauri-apps/libappindicator-rs/blob/eafd1e3682a1247f595410266091e9684021cb6f/LICENSE-APACHE",
+    "https://github.com/tauri-apps/libappindicator-rs/blob/eafd1e3682a1247f595410266091e9684021cb6f/LICENSE-MIT"
+  ]
+}

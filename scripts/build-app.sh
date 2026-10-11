@@ -15,6 +15,7 @@ export APPIMAGE_EXTRACT_AND_RUN=1
 
 cd "$app"
 npm ci
+python3 "$here/scripts/collect-notices.py" app "$here/build/THIRD-PARTY-NOTICES.txt"
 npx tauri build --config "$here/tauri.linux.conf.json"
 
 mkdir -p "$here/dist"
