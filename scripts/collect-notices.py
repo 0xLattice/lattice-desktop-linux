@@ -46,7 +46,12 @@ elif mode == 'app':
         metadata = json.loads(subprocess.check_output(command))
         for package in metadata['packages']:
             if package['source']:
-                notices.collect(f"Cargo {package['name']} {package['version']}", Path(package['manifest_path']).parent, recursive=True)
+                label = f"Cargo {package['name']} {package['version']}"
+                notices.collect(label, Path(package['manifest_path']).parent, recursive=True)
+                fallback = root / 'docs/licenses' / f"{package['name']}-{package['version']}.txt"
+                if label in notices.missing and fallback.is_file():
+                    notices.records.append(f'\n## {label} — upstream license\n\n' + fallback.read_text(encoding='utf-8'))
+                    notices.missing.remove(label)
 else:
     raise ValueError('Expected node or app')
 if notices.missing:
