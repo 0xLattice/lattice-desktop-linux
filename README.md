@@ -69,10 +69,14 @@ WebKitGTK 4.1 (Ubuntu 22.04, Debian 12, Fedora 36 and later).
 here: its unit tests, the shell's tests, and the headless end-to-end tests,
 which drive the app's page against a real node on throwaway storage with no
 peers. The mining test searches on the graphics chip where the GPU worker can
-use one, and on the processor where it cannot. CI has no graphics chip, so it
-sets `LATTICE_MINER_OPENCL_DEVICES=all`, which lets the worker use PoCL (OpenCL
-on the processor): the same worker, kernel and mining loop, on a different
-device.
+use one, and on the processor where it cannot.
+
+`scripts/test-gpu-mining.sh <directory of binaries>` is the mining test with
+the graphics chip required: it fails unless the GPU worker searches and the
+app mines with it. CI runs it on Ubuntu 24.04 against the installed `.deb`.
+A runner has no graphics chip, so CI sets `LATTICE_MINER_OPENCL_DEVICES=all`,
+which lets the worker use PoCL (OpenCL on the processor): the same worker,
+kernel and mining loop, on a different device.
 
 `scripts/test.sh --package` then installs the `.deb` and launches the
 installed app on a virtual display, checking that the app itself brought its
