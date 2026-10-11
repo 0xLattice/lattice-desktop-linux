@@ -1,0 +1,17 @@
+{
+  "bundle": {
+    "targets": ["deb", "appimage"],
+    "externalBin": [],
+    "resources": {
+      "../../../build/bin/lattice": "bin/lattice",
+      "../../../build/bin/lattice-node": "bin/lattice-node",
+      "../../../build/bin/lattice-mining-coordinator": "bin/lattice-mining-coordinator",
+      "../../../build/bin/lattice-miner": "bin/lattice-miner"
+    },
+    "linux": {
+      "deb": {
+        "depends": ["libsqlite3-0"]
+      }
+    }
+  }
+}

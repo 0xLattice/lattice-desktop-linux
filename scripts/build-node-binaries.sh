@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Build the node binaries the app carries (`lattice`, `lattice-node`,
+# `lattice-mining-coordinator`, `lattice-miner`) from adalinxx/lattice-node at
+# the commit the shared app pins (vendor/lattice-desktop/NODE_COMMIT), with the
+# node's own release build: optimized, the Swift runtime linked in, so they run
+# on a plain Linux host with glibc and SQLite.
+#
+# Usage: scripts/build-node-binaries.sh
+#   Needs a Swift 6.1 toolchain (the swift:6.1-jammy image has one).
+#   Output: build/bin/, with the commit in build/bin/COMMIT.
+set -euo pipefail
+here="$(cd "$(dirname "$0")/.." && pwd)"
+commit="$(tr -d '[:space:]' < "$here/vendor/lattice-desktop/NODE_COMMIT")"
+src="$here/.build-node"
+
+if [ ! -d "$src/.git" ]; then
+  git clone --quiet https://github.com/adalinxx/lattice-node.git "$src"
+fi
+git -C "$src" fetch --quiet origin "$commit"
+git -C "$src" checkout --quiet --detach "$commit"
+if [ -n "$(git -C "$src" status --porcelain --untracked-files=no)" ]; then
+  echo "lattice-node checkout has local changes; refusing to bundle it" >&2
+  exit 1
+fi
+
+(cd "$src" && scripts/build-release-binaries.sh)
+
+out="$here/build/bin"
+rm -rf "$out"
+mkdir -p "$out"
+for name in lattice lattice-node lattice-mining-coordinator lattice-miner; do
+  install -m 0755 "$src/.build/release-binaries/$name" "$out/$name"
+done
+printf '%s\n' "$commit" > "$out/COMMIT"
+echo "staged the node binaries at $commit in $out"
