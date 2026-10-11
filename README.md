@@ -22,8 +22,14 @@ On Linux:
 - The node binaries are installed in the package's own directory
   (`/usr/lib/Lattice/bin`), not on the `PATH`, so they neither replace nor are
   replaced by a `lattice` the machine already has.
-- Mining searches on the processor. The graphics-chip worker the macOS app
-  carries is Metal only; there is none in this package yet.
+- Mining searches on the graphics chip through OpenCL (AMD, Intel, NVIDIA),
+  or on the processor. The app offers the graphics chip when the worker finds
+  a hash on it, which needs the system's OpenCL loader (`ocl-icd-libopencl1`
+  on Debian and Ubuntu, which the `.deb` recommends) and the OpenCL package
+  of the graphics driver: for example `nvidia-opencl-icd` or the driver's own
+  installer for NVIDIA, `intel-opencl-icd` for Intel, `mesa-opencl-icd` or
+  the vendor's driver for AMD. `clinfo` lists what the machine has. Without
+  them the app offers the processor only.
 
 ## Build
 
@@ -47,6 +53,10 @@ run on Ubuntu 22.04 or later with a Swift 6.1 toolchain installed.
   [lattice-node](https://github.com/adalinxx/lattice-node) at the commit in
   `vendor/lattice-desktop/NODE_COMMIT`, with the node's own release build. The
   Swift runtime is linked in; they need only glibc and SQLite from the host.
+  It also builds the GPU mining worker from
+  [lattice-miner-gpu](https://github.com/adalinxx/lattice-miner-gpu) at the
+  commit in `vendor/lattice-desktop/MINER_GPU_COMMIT`, with its OpenCL
+  backend.
 - `scripts/build-app.sh` builds the shared app with `tauri.linux.conf.json`
   laid over its configuration.
 
@@ -58,7 +68,15 @@ WebKitGTK 4.1 (Ubuntu 22.04, Debian 12, Fedora 36 and later).
 `scripts/test.sh` runs the shared app's tests against the node binaries built
 here: its unit tests, the shell's tests, and the headless end-to-end tests,
 which drive the app's page against a real node on throwaway storage with no
-peers.
+peers. The mining test searches on the graphics chip where the GPU worker can
+use one, and on the processor where it cannot.
+
+`scripts/test-gpu-mining.sh <directory of binaries>` is the mining test with
+the graphics chip required: it fails unless the GPU worker searches and the
+app mines with it. CI runs it on Ubuntu 24.04 against the installed `.deb`.
+A runner has no graphics chip, so CI sets `LATTICE_MINER_OPENCL_DEVICES=all`,
+which lets the worker use PoCL (OpenCL on the processor): the same worker,
+kernel and mining loop, on a different device.
 
 `scripts/test.sh --package` then installs the `.deb` and launches the
 installed app on a virtual display, checking that the app itself brought its

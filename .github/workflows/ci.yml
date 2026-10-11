@@ -32,3 +32,31 @@ jobs:
           name: lattice-desktop-linux-amd64
           path: dist/
           if-no-files-found: error
+
+  # GPU mining with the binaries the package installs, on a second
+  # distribution: the shared app's mining test (its page, with the test's
+  # stand-in for the shell) against the installed node and GPU worker. A
+  # runner has no graphics chip, so the worker searches on PoCL (OpenCL on the
+  # processor), which LATTICE_MINER_OPENCL_DEVICES=all lets it use: the same
+  # worker, kernel and mining loop as on a graphics chip. (The build image's
+  # PoCL is too old to know a current runner's processor.)
+  gpu-mining:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      E2E_TIME_SCALE: 3
+      LATTICE_MINER_OPENCL_DEVICES: all
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v4
+        with:
+          name: lattice-desktop-linux-amd64
+          path: dist
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: sudo apt-get update && sudo apt-get install -y ./dist/*.deb pocl-opencl-icd
+      - run: scripts/test-gpu-mining.sh /usr/lib/Lattice/bin
