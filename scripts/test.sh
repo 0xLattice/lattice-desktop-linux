@@ -15,7 +15,8 @@ cd "$app"
 [ -d node_modules ] || npm ci
 npm run typecheck
 LATTICE_NODE_BIN="$here/build/bin" npm test
-cargo test --manifest-path src-tauri/Cargo.toml
+# The shell is built as it is packaged here: with this repository's configuration over the shared one.
+TAURI_CONFIG="$(cat "$here/tauri.linux.conf.json")" cargo test --manifest-path src-tauri/Cargo.toml
 
 if [ "${1:-}" = "--package" ]; then
   apt-get install -y "$here"/dist/*.deb
