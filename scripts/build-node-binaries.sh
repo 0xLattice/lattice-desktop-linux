@@ -57,3 +57,5 @@ fi
 install -m 0755 "$gpu_src/target/release/lattice-miner-gpu" "$out/lattice-miner-gpu"
 printf '%s\n' "$gpu_commit" > "$out/MINER_GPU_COMMIT"
 echo "staged the node binaries at $commit and the GPU worker at $gpu_commit in $out"
+
+python3 "$here/scripts/collect-notices.py" node "$out/NODE-NOTICES.txt"

@@ -9,7 +9,7 @@ set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y --no-install-recommends \
-  build-essential ca-certificates curl file git jq xz-utils \
+  build-essential ca-certificates curl file git jq xz-utils python3 \
   libssl-dev libsqlite3-dev libwebkit2gtk-4.1-dev libxdo-dev \
   libayatana-appindicator3-dev librsvg2-dev \
   xvfb xauth xdg-utils dbus-x11
