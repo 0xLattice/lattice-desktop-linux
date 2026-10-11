@@ -51,7 +51,9 @@ if [ -n "$(git -C "$gpu_src" status --porcelain --untracked-files=no)" ]; then
   echo "lattice-miner-gpu checkout has local changes; refusing to bundle it" >&2
   exit 1
 fi
-(cd "$gpu_src" && cargo build --release --locked --features opencl)
+# The target directory is named, so a CARGO_TARGET_DIR set outside cannot leave
+# an older build to be picked up below.
+(cd "$gpu_src" && cargo build --release --locked --features opencl --target-dir "$gpu_src/target")
 install -m 0755 "$gpu_src/target/release/lattice-miner-gpu" "$out/lattice-miner-gpu"
 printf '%s\n' "$gpu_commit" > "$out/MINER_GPU_COMMIT"
 echo "staged the node binaries at $commit and the GPU worker at $gpu_commit in $out"

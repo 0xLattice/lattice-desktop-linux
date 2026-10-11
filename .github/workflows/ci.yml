@@ -33,7 +33,9 @@ jobs:
           path: dist/
           if-no-files-found: error
 
-  # GPU mining with the package as installed, on a second distribution. A
+  # GPU mining with the binaries the package installs, on a second
+  # distribution: the shared app's mining test (its page, with the test's
+  # stand-in for the shell) against the installed node and GPU worker. A
   # runner has no graphics chip, so the worker searches on PoCL (OpenCL on the
   # processor), which LATTICE_MINER_OPENCL_DEVICES=all lets it use: the same
   # worker, kernel and mining loop as on a graphics chip. (The build image's
