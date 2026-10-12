@@ -60,6 +60,14 @@ jobs:
           node-version: 24
       - run: sudo apt-get update && sudo apt-get install -y ./dist/*.deb pocl-opencl-icd
       - run: scripts/test-gpu-mining.sh /usr/lib/Lattice/bin
+      - name: Disposable peer-format upgrade and rollback fixtures
+        run: |
+          old="$RUNNER_TEMP/lattice-old"
+          mkdir -p "$old"
+          curl -fL https://github.com/adalinxx/lattice-desktop-linux/releases/download/v0.1.0/Lattice_0.1.0_amd64.deb -o "$old/package.deb"
+          echo "24451008ab68bd8426e0951b9464019175d5fc930fa98656ccb38ae72999b809  $old/package.deb" | sha256sum -c -
+          dpkg-deb -x "$old/package.deb" "$old/package"
+          python3 test/peer-format.py /usr/lib/Lattice/bin/lattice "$old/package/usr/lib/Lattice/bin/lattice"
 
   # The installed app in its own window, driven through WebDriver: a wallet,
   # the node the app starts, mining, a transfer, and the common mistakes on
@@ -82,6 +90,8 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ./dist/*.deb webkit2gtk-driver xvfb
       - run: cargo install tauri-driver --locked
       - run: scripts/test-ui.sh
+      - name: Native release navigation and lock keyboard checks
+        run: LATTICE_UI_TEST_FILE="$PWD/test/release-ui.test.mjs" scripts/test-ui.sh
       - name: Check bundled notices and AppImage runtime
         run: |
           test -s /usr/lib/Lattice/THIRD-PARTY-NOTICES.txt
@@ -90,3 +100,4 @@ jobs:
           ./Lattice_*.AppImage --appimage-extract >/dev/null
           test -s squashfs-root/usr/lib/Lattice/THIRD-PARTY-NOTICES.txt
           ../scripts/test-ui.sh "$PWD/squashfs-root/AppRun" "$PWD/squashfs-root/usr/lib/Lattice/bin"
+          LATTICE_UI_TEST_FILE="$GITHUB_WORKSPACE/test/release-ui.test.mjs" ../scripts/test-ui.sh "$PWD/squashfs-root/AppRun" "$PWD/squashfs-root/usr/lib/Lattice/bin"
