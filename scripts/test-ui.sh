@@ -16,7 +16,7 @@ here="$(cd "$(dirname "$0")/.." && pwd)"
 export LATTICE_UI_APP="${1:-/usr/bin/lattice-desktop}"
 export LATTICE_APP_BINARIES="${2:-/usr/lib/Lattice/bin}"
 
-test="$here/vendor/lattice-desktop/test/ui/desktop.ui.test.mjs"
+test="${LATTICE_UI_TEST_FILE:-$here/vendor/lattice-desktop/test/ui/desktop.ui.test.mjs}"
 if [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; then
   node --test "$test"
 else
