@@ -20,7 +20,7 @@ cd "$app"
 npm run typecheck
 LATTICE_NODE_BIN="$here/build/bin" LATTICE_GPU_MINER="$here/build/bin/lattice-miner-gpu" npm test
 # The shell is built as it is packaged here: with this repository's configuration over the shared one.
-TAURI_CONFIG="$(cat "$app/src-tauri/tauri.conf.json")" cargo test --manifest-path src-tauri/Cargo.toml
+TAURI_CONFIG="$(cat "$here/tauri.linux.conf.json")" cargo test --manifest-path src-tauri/Cargo.toml
 
 if [ "${1:-}" = "--package" ]; then
   version="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "$app/src-tauri/tauri.conf.json")"
