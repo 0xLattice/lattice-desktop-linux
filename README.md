@@ -4,7 +4,7 @@ A full Lattice node and the Lattice Wallet in one Linux app, as a `.deb` and an
 AppImage.
 
 This repository is the Linux packaging of
-[lattice-desktop](https://github.com/adalinxx/lattice-desktop). The app itself
+[lattice-desktop](https://github.com/0xLattice/lattice-desktop). The app itself
 (the wallet, the node screens, the shell that runs the node) is that
 repository, pinned here as the submodule `vendor/lattice-desktop`, and is the
 same code on every platform. What is here is only what differs on Linux:
@@ -14,7 +14,7 @@ same code on every platform. What is here is only what differs on Linux:
 - and the checks that the result works on Linux (`scripts/test.sh`, CI).
 
 What the app does is described in
-[lattice-desktop's README](https://github.com/adalinxx/lattice-desktop#readme).
+[lattice-desktop's README](https://github.com/0xLattice/lattice-desktop#readme).
 On Linux:
 
 - The app's data is in `~/.local/share/Lattice` (or `$XDG_DATA_HOME/Lattice`):
@@ -36,7 +36,7 @@ On Linux:
 On Linux, with Docker, in the image the node itself is built in:
 
 ```sh
-git clone --recurse-submodules https://github.com/adalinxx/lattice-desktop-linux.git
+git clone --recurse-submodules https://github.com/0xLattice/lattice-desktop-linux.git
 cd lattice-desktop-linux
 docker run --rm -it -v "$PWD":/work -w /work swift:6.1-jammy bash -c '
   git config --global --add safe.directory "*" &&
@@ -50,11 +50,11 @@ run on Ubuntu 22.04 or later with a Swift 6.1 toolchain installed.
 
 - `scripts/build-node-binaries.sh` builds `lattice`, `lattice-node`,
   `lattice-mining-coordinator` and `lattice-miner` from
-  [lattice-node](https://github.com/adalinxx/lattice-node) at the commit in
+  [lattice-node](https://github.com/0xLattice/lattice-node) at the commit in
   `vendor/lattice-desktop/NODE_COMMIT`, with the node's own release build. The
   Swift runtime is linked in; they need only glibc and SQLite from the host.
   It also builds the GPU mining worker from
-  [lattice-miner-gpu](https://github.com/adalinxx/lattice-miner-gpu) at the
+  [lattice-miner-gpu](https://github.com/0xLattice/lattice-miner-gpu) at the
   commit in `vendor/lattice-desktop/MINER_GPU_COMMIT`, with its OpenCL
   backend.
 - `scripts/build-app.sh` builds the shared app with `tauri.linux.conf.json`
