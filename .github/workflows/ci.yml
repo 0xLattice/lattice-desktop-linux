@@ -64,7 +64,7 @@ jobs:
         run: |
           old="$RUNNER_TEMP/lattice-old"
           mkdir -p "$old"
-          curl -fL https://github.com/adalinxx/lattice-desktop-linux/releases/download/v0.1.0/Lattice_0.1.0_amd64.deb -o "$old/package.deb"
+          curl -fL https://github.com/0xLattice/lattice-desktop-linux/releases/download/v0.1.0/Lattice_0.1.0_amd64.deb -o "$old/package.deb"
           echo "24451008ab68bd8426e0951b9464019175d5fc930fa98656ccb38ae72999b809  $old/package.deb" | sha256sum -c -
           dpkg-deb -x "$old/package.deb" "$old/package"
           python3 test/peer-format.py /usr/lib/Lattice/bin/lattice "$old/package/usr/lib/Lattice/bin/lattice"
